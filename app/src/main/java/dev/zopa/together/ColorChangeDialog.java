@@ -12,6 +12,8 @@ import android.view.View;
  */
 public class ColorChangeDialog extends Dialog {
 
+
+
     public interface OnColorChangedListener {
         void colorChanged(int color);
     }
@@ -62,6 +64,7 @@ public class ColorChangeDialog extends Dialog {
             //------------------------------------------------------------
 
         }
+
 
         private boolean mTrackingCenter;
         private boolean mHighlightCenter;

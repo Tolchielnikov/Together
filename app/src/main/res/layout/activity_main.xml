@@ -17,7 +17,7 @@
         android:onClick="onclick"
         android:text="Счетчик отношений &lt;3"
         android:id="@+id/countDayView"
-        android:textColor="#ffffff" />
+        android:textColor="#fcfbfb" />
 
     <TextView
         android:layout_width="wrap_content"

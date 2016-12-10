@@ -2,7 +2,17 @@ package dev.zopa.together;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.MotionEvent;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -36,17 +46,20 @@ public class MainActivity extends AppCompatActivity implements ColorChangeDialog
     private static final String LAUGHT = " раз смеялся";
     private static final String THISIS = "А это примерно:";
     private static final String THISTIME = " За это время:";
+
     private static final int DAY_OF_MONTH = 30;
     private static final int DAY_OF_WEEK = 7;
     private static final int MONTH_OF_YEAR = 12;
 
-    private static final String BRIGHTNESS_PREFERENCE_KEY = "brightness";
     private static final String COLOR_PREFERENCE_KEY = "color";
 
     int DIALOG_DATE = 1;
     int myYear = 2015;
     int myMonth = 7;
     int myDay = 5;
+
+    //todo del
+        final String LOG_TAG = "myLogs";
 
     TextView countDayView;
     TextView second;
@@ -65,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements ColorChangeDialog
     TextView thisTime;
 
     SimpleDateFormat format;
+
+    SharedPreferences myColor;
 
     // create menu
     @Override
@@ -115,10 +130,15 @@ public class MainActivity extends AppCompatActivity implements ColorChangeDialog
         heardBeans = (TextView) findViewById(R.id.perd);
         earthquake = (TextView) findViewById(R.id.earthquake);
 
-
         countDayView = (TextView) findViewById(R.id.countDayView);
 
         format = new SimpleDateFormat("dd/MM/yyyy");
+
+        setTextColor();
+
+//
+//        HeardView heard = new HeardView(this); // создаем объект myview класса GraphicsView
+//        setContentView(heard); // отображаем его в Activity
     }
 
 
@@ -130,8 +150,9 @@ public class MainActivity extends AppCompatActivity implements ColorChangeDialog
 
     protected Dialog onCreateDialog(int id) {
         if (id == DIALOG_DATE) {
-            DatePickerDialog tpd = new DatePickerDialog(this, myCallBack, myYear, myMonth, myDay);
-            return tpd;
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, myCallBack, myYear, myMonth, myDay);
+            return datePickerDialog;
         }
         return super.onCreateDialog(id);
     }
@@ -179,7 +200,6 @@ public class MainActivity extends AppCompatActivity implements ColorChangeDialog
                     heardBeans.setText(diffDays * 104 + HEARDBEANS);
                     steps.setText(diffDays * 8 + STEPS);
                     sigh.setText(diffDays * 12 + SIGHT);
-
                 }
                 if (diffSec > 0) {
                     second.setText(diffSec + SEC);
@@ -205,7 +225,18 @@ public class MainActivity extends AppCompatActivity implements ColorChangeDialog
 
     @Override
     public void colorChanged(int color) {
+
         PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(COLOR_PREFERENCE_KEY, color).commit();
+        setTextColor();
+
+        Toast.makeText(getApplicationContext(),
+                "Цвет текста изменен", Toast.LENGTH_LONG).show();
+    }
+
+    private void setTextColor (){
+
+        myColor = PreferenceManager.getDefaultSharedPreferences(this);
+        int color = myColor.getInt(COLOR_PREFERENCE_KEY,-16646144);
 
         countDayView.setTextColor(color);
         second.setTextColor(color);
@@ -222,9 +253,5 @@ public class MainActivity extends AppCompatActivity implements ColorChangeDialog
         steps.setTextColor(color);
         thisis.setTextColor(color);
         thisTime.setTextColor(color);
-
-
-        Toast.makeText(getApplicationContext(),
-                "Цвет текста изменен", Toast.LENGTH_LONG).show();
     }
 }
