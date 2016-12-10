@@ -2,8 +2,11 @@ package dev.zopa.together;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SEC = " сек.";
     private static final String WEEKS = " нед.";
     private static final String YEAR = " лет.";
-    private static final String JULIA = " раз Юля перднет.";
+    private static final String JULIA = " раз Юля перднет";
     private static final String EARTHQUAKES = " землетрясений";
     private static final String SIGHT = " тыс вздоха";
     private static final String HEARDBEANS = " тыс удара сердца";
@@ -58,6 +61,30 @@ public class MainActivity extends AppCompatActivity {
 
     SimpleDateFormat format;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.photo_settings:
+                Toast.makeText(getApplicationContext(),
+                        "фон изменен", Toast.LENGTH_LONG).show();
+                return true;
+
+            case R.id.color_settings:
+                Toast.makeText(getApplicationContext(),
+                        "Цвет текста изменен", Toast.LENGTH_LONG).show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
         format = new SimpleDateFormat("dd/MM/yyyy");
     }
 
+
+    // todo dobafit  fon
     public void onclick(View view) {
         showDialog(DIALOG_DATE);
     }
@@ -97,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onCreateDialog(id);
     }
-
+//todo save yer month day in SharePref.
     DatePickerDialog.OnDateSetListener myCallBack = new DatePickerDialog.OnDateSetListener() {
 
         public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -136,10 +165,10 @@ public class MainActivity extends AppCompatActivity {
                     countDayView.setText(TOGETHER + diffDays + DAYS);
                     perd.setText(diffDays * 15 + JULIA);
                     earthquake.setText(diffDays * 5 + EARTHQUAKES);
-                    laught.setText(diffDays * 15 + LAUGHT);
+                    laught.setText(diffDays * 18 + LAUGHT);
                     heardBeans.setText(diffDays * 104 + HEARDBEANS);
                     steps.setText(diffDays * 8 + STEPS);
-                    sigh.setText(diffDays * 8 + SIGHT);
+                    sigh.setText(diffDays * 12 + SIGHT);
 
                 }
                 if (diffSec > 0) {
