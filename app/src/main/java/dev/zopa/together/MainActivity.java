@@ -2,7 +2,9 @@ package dev.zopa.together;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.support.v7.app.ActionBarActivity;
+import android.content.Context;
+import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,7 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ColorChangeDialog.OnColorChangedListener {
 
     private static final String TOGETHER = "Вы вместе примерно - ";
     private static final String DAYS = " дн.";
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int DAY_OF_MONTH = 30;
     private static final int DAY_OF_WEEK = 7;
     private static final int MONTH_OF_YEAR = 12;
+
+    private static final String BRIGHTNESS_PREFERENCE_KEY = "brightness";
+    private static final String COLOR_PREFERENCE_KEY = "color";
 
     int DIALOG_DATE = 1;
     int myYear = 2015;
@@ -61,29 +66,33 @@ public class MainActivity extends AppCompatActivity {
 
     SimpleDateFormat format;
 
+    // create menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
-
+//create menu listener
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.photo_settings:
+
                 Toast.makeText(getApplicationContext(),
                         "фон изменен", Toast.LENGTH_LONG).show();
                 return true;
 
             case R.id.color_settings:
-                Toast.makeText(getApplicationContext(),
-                        "Цвет текста изменен", Toast.LENGTH_LONG).show();
+                int color = PreferenceManager.getDefaultSharedPreferences(
+                        MainActivity.this).getInt(COLOR_PREFERENCE_KEY,
+                        Color.WHITE);
+                new ColorChangeDialog(MainActivity.this, MainActivity.this,
+                        color).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     @Override
@@ -126,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onCreateDialog(id);
     }
+
 //todo save yer month day in SharePref.
     DatePickerDialog.OnDateSetListener myCallBack = new DatePickerDialog.OnDateSetListener() {
 
@@ -193,4 +203,28 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void colorChanged(int color) {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putInt(COLOR_PREFERENCE_KEY, color).commit();
+
+        countDayView.setTextColor(color);
+        second.setTextColor(color);
+        min.setTextColor(color);
+        hours.setTextColor(color);
+        week.setTextColor(color);
+        mounths.setTextColor(color);
+        years.setTextColor(color);
+        perd.setTextColor(color);
+        earthquake.setTextColor(color);
+        sigh.setTextColor(color);
+        heardBeans.setTextColor(color);
+        laught.setTextColor(color);
+        steps.setTextColor(color);
+        thisis.setTextColor(color);
+        thisTime.setTextColor(color);
+
+
+        Toast.makeText(getApplicationContext(),
+                "Цвет текста изменен", Toast.LENGTH_LONG).show();
+    }
 }
